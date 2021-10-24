@@ -1,0 +1,59 @@
+---
+project: 'ric_plt_ricdms'
+project_creation_date: '2021-10-21'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &oran_ric_plt_ricdms_ptl
+    name: 'Thoralf Czichy'
+    email: 'thoralf.czichy@nokia.com'
+    id: 'czichy'
+    company: 'Nokia'
+    timezone: 'Europe/Helsinki'
+primary_contact: *oran_ric_plt_ricdms_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.o-ran-sc.org/projects/'
+    key: 'RIC'
+mailing_list:
+    type: 'groups.io'
+    url: 'technical-discuss@lists.o-ran-sc.org'
+    tag: '[]'
+realtime_discussion:
+    type: 'irc'
+    server: 'freenode.net'
+    channel: '#oran'
+meetings:
+    - type: 'gotomeeting+irc'
+      agenda: 'https://wiki.o-ran-sc.org/display/RICP/Project+meetings'
+      url: ''
+      server: 'freenode.net'
+      channel: '#oran'
+      repeats: ''
+      time: ''
+repositories:
+    - ric-plt/ricdms
+committers:
+    - <<: *oran_ric_plt_ricdms_ptl
+    - name: 'Naman Gupta'
+      email: 'naman.gupta@samsung.com'
+      company: 'samsung'
+      id: 'naman.gupta'
+    - name: 'Subhash Kumar Singh'
+      email: 'subh.singh@samsung.com'
+      company: 'samsung'
+      id: 'subhash_singh'
+    - name: 'Abukar Mohamed'
+      email: 'abukar.mohamed@nokia.com'
+      company: 'nokia'
+      id: 'Nune'
+    - name: 'Suchismita Jena'
+      email: 'suchismita.jena@nokia.com'
+      company: 'nokia'
+      id: 'suchismita13'
+tsc:
+    # yamllint disable rule:line-length
+    approval: 'https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=1179656'
+    changes:
+        - type: ''
+          name: ''
+          link: ''
