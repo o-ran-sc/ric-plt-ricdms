@@ -1,0 +1,72 @@
+---
+project: 'ric_plt_ricdms'
+project_creation_date: '2021-10-20'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &oran_ric_plt_ricdms_ptl
+    name: 'Thoralf Czichy'
+    email: 'thoralf.czichy@nokia.com'
+    id: 'czichy'
+    company: 'Nokia'
+    timezone: 'America/New_York'
+primary_contact: *oran_ric_plt_ricdms_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.o-ran-sc.org/projects/'
+    key: 'ric_plt_ricdms'
+mailing_list:
+    type: 'groups.io'
+    url: 'technical-discuss@lists.o-ran-sc.org'
+    tag: '[]'
+realtime_discussion:
+    type: 'irc'
+    server: 'freenode.net'
+    channel: '#oran'
+meetings:
+    - type: 'gotomeeting+irc'
+      agenda: 'https://wiki.o-ran-sc.org/display/'
+      url: ''
+      server: 'freenode.net'
+      channel: '#oran'
+      repeats: ''
+      time: ''
+repositories:
+    - ric-plt/ricdms
+committers:
+    - <<: *oran_ric_plt_ricdms_ptl
+    - name: 'Suchismit'
+      email: 'suchismita.jena@nokia'
+      company: 'nokia'
+      id: 'suchismita13'
+      timezone: 'Unknown/Unknown'
+    - name: 'Abukar Mohamed'
+      email: 'abukar.mohamed@nokia'
+      company: 'nokia'
+      id: 'Nune'
+      timezone: 'Unknown/Unknown'
+    - name: 'Naman Gupta'
+      email: 'naman.gupta@samsung.com'
+      company: 'samsung'
+      id: 'naman.gupta'
+      timezone: 'Unknown/Unknown'
+    - name: 'Subhash Kumar Singh'
+      email: 'subh.singh@samsung.com'
+      company: 'samsung'
+      id: 'subhash_singh'
+      timezone: 'Unknown/Unknown'
+tsc:
+    # yamllint disable rule:line-length
+    approval: 'https://lists.o-ran-sc.org/g/toc/topic/86462834'
+    changes:
+        - type: 'Promotion'
+          name: 'Suchismit'
+          link: 'https://lists.o-ran-sc.org/g/toc/topic/86462834'
+        - type: 'Promotion'
+          name: 'Abukar Mohamed'
+          link: 'https://lists.o-ran-sc.org/g/toc/topic/86462834'
+        - type: 'Promotion'
+          name: 'Subhash Kumar Singh'
+          link: 'https://lists.o-ran-sc.org/g/toc/topic/86462834'
+        - type: 'Promotion'
+          name: 'Naman Gupta'
+          link: 'https://lists.o-ran-sc.org/g/toc/topic/86462834'
