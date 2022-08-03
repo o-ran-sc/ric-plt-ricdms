@@ -1,0 +1,464 @@
+# ==================================================================================
+#   Copyright (c) 2022 Samsung.
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#          http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+#   This source code is part of the near-RT RIC (RAN Intelligent Controller)
+#   platform project (RICP).
+# ==================================================================================
+
+swagger: '2.0'
+info:
+  description: APIs for RIC-DMS
+  title: RIC DMS
+  version: '1.0'
+basePath: /api/v1
+host: localhost:8000
+schemes:
+  - http
+paths:
+  /charts:
+    get:
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: Get helm chart list
+          schema:
+            type: object
+        '500':
+          description: Get helm chart list failed
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - charts
+      operationId: get_charts_list
+      summary: Returns the list of xApp helm charts that have been onboarded
+  '/charts/xApp/download/{xApp_name}/ver/{version}':
+    get:
+      produces:
+        - application/zip
+        - text/json
+      parameters:
+        - in: path
+          name: xApp_name
+          required: true
+          type: string
+        - in: path
+          name: version
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Download helm chart OK
+          schema:
+            format: binary
+            type: string
+        '500':
+          description: Get helm chart values.yaml failed
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - charts
+      description: Download helm chart.
+      operationId: download_helm_chart
+      summary: Download helm chart
+  '/charts/xApp/{xApp_name}':
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: xApp_name
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Get helm chart
+          schema:
+            type: object
+        '500':
+          description: Get helm chart failed
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - charts
+      operationId: get_chart
+      summary: Returns the helm chart for the specified xApp
+  '/charts/xApp/{xApp_name}/ver/{version}':
+    delete:
+      produces:
+        - application/json
+        - application/gzip
+      parameters:
+        - in: path
+          name: xApp_name
+          required: true
+          type: string
+        - in: path
+          name: version
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Deleted specified helm chart
+          schema:
+            type: object
+        '500':
+          description: Delete helm chart failed
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - charts
+      operationId: delete_chart
+      summary: Delete helm chart for the specified xApp and version
+    get:
+      produces:
+        - application/json
+        - application/gzip
+      parameters:
+        - in: path
+          name: xApp_name
+          required: true
+          type: string
+        - in: path
+          name: version
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Get helm chart package OK
+          schema:
+            type: object
+        '500':
+          description: Get helm chart package failed
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - charts
+      operationId: get_charts_fetcher
+      summary: get the helm chart for the specified xApp and version
+  '/charts/xApp/{xApp_name}/ver/{version}/values.yaml':
+    get:
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - in: path
+          name: xApp_name
+          required: true
+          type: string
+        - in: path
+          name: version
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Get helm chart values.yaml OK
+          schema:
+            type: object
+        '500':
+          description: Get helm chart values.yaml failed
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - charts
+      description: yaml file of the specified xApp and version.
+      operationId: get_values_yaml_fetcher
+      summary: Returns the helm values
+  /deploy:
+    delete:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - description: Input for the xApp deploy
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/deleteDeploymentDesc'
+      responses:
+        '201':
+          description: successful un-deploy xApp
+          schema:
+            type: object
+        '501':
+          description: un-deployment failed
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - deploy
+      summary: Undeploy xApp
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - description: Input for the xApp deployment
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/deploymentDesc'
+      responses:
+        '201':
+          description: successful deployment of xApp
+          schema:
+            type: object
+        '501':
+          description: deployment failed
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - deploy
+      summary: deploy xApp
+    put:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - description: Input for the xApp deploy
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/updateDeploymentDesc'
+      responses:
+        '201':
+          description: successful updated xApp
+          schema:
+            type: object
+        '501':
+          description: un-deployment failed
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - deploy
+      summary: update xApp
+  /health:
+    get:
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: Health check OK
+          schema:
+            $ref: '#/definitions/status'
+        '500':
+          description: ric-dms is not ready
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - health
+      operationId: get_health_check
+      summary: Returns the health condition of ric dms
+  '/healthcheck/xApp/{xApp_name}/namespace/{namespace}':
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: xApp_name
+          required: true
+          type: string
+        - in: path
+          name: namespace
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Health check OK
+          schema:
+            $ref: '#/definitions/status'
+        '500':
+          description: xApp onboarder is not ready
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - health
+      summary: Return status of xApp deployment
+  /onboarder:
+    delete:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              appname:
+                type: string
+              version:
+                type: string
+            required:
+              - appname
+            type: object
+      responses:
+        '201':
+          description: xApp onboard successfully.
+          schema:
+            $ref: '#/definitions/status'
+        '400':
+          description: xApp descriptor format error
+          schema:
+            $ref: '#/definitions/error_message'
+        '500':
+          description: xApp onboarder is not ready
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - onboard
+      operationId: delete_onboardx_apps
+      summary: offload xApp using the xApp name and version
+      x-codegen-request-body-name: payload
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/descriptor'
+      responses:
+        '201':
+          description: xApp onboard successfully.
+          schema:
+            $ref: '#/definitions/status'
+        '400':
+          description: xApp descriptor format error
+          schema:
+            $ref: '#/definitions/error_message'
+        '500':
+          description: xApp onboarder is not ready
+          schema:
+            $ref: '#/definitions/error_message'
+      tags:
+        - onboard
+      operationId: post_onboardx_apps
+      summary: >-
+        Onboard xApp using the xApp descriptor and schema or URL of descriptor
+        and schema.
+      x-codegen-request-body-name: payload
+definitions:
+  deleteDeploymentDesc:
+    properties:
+      namespace:
+        description: namespace to deploy xApp
+        type: string
+      version:
+        type: string
+      xAppname:
+        type: string
+    required:
+      - xAppname
+      - version
+    type: object
+  deploymentDesc:
+    properties:
+      namespace:
+        description: namespace to deploy xApp
+        type: string
+      overridefile:
+        description: override file
+        type: string
+      version:
+        type: string
+      xAppname:
+        type: string
+    required:
+      - namespace
+    type: object
+  descriptor:
+    properties:
+      config:
+        description: represents content of config file for xApp onboarding.
+        type: string
+      config-file_url:
+        description: specify url of config-file.
+        type: string
+      schema:
+        description: represents conent of schema file for xApp onboarding.
+        type: string
+      schema-file_url:
+        description: specify url of schema-file.
+        type: string
+    type: object
+  error_message:
+    properties:
+      error_message:
+        description: source of the error
+        type: string
+      error_source:
+        description: source of the error
+        type: string
+      status:
+        description: http response message
+        type: string
+    required:
+      - error_message
+      - error_source
+      - status
+    type: object
+  name:
+    properties:
+      property:
+        type: integer
+    type: object
+  status:
+    properties:
+      status:
+        description: status of the service
+        type: string
+    required:
+      - status
+    type: object
+  updateDeploymentDesc:
+    properties:
+      namespace:
+        description: namespace to deploy xApp
+        type: string
+      newVersion:
+        type: string
+      oldVersion:
+        type: string
+      operation:
+        enum:
+          - rollback
+          - upgrade
+        type: string
+      xAppname:
+        type: string
+    required:
+      - namespace
+    type: object
+tags:
+  - description: onboard xApps
+    name: onboard
+  - description: health check
+    name: health
+  - description: Managing helm charts
+    name: charts
+  - description: Managing deployment
+    name: deploy
+x-components: {}
