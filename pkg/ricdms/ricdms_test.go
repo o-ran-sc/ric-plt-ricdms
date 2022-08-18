@@ -17,41 +17,27 @@
 //   platform project (RICP).
 //==================================================================================
 //
-package restful
+package ricdms
 
 import (
-	"log"
 	"os"
+	"path"
+	"testing"
 
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi"
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations"
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
-	"github.com/go-openapi/loads"
+	"gerrit.o-ran-sc.org/r/com/golog"
+	"github.com/stretchr/testify/assert"
 )
 
-func NewRestful() *Restful {
-	r := &Restful{}
-	r.setupHandler()
-	return r
+func TestLoggerWithConfigFile(t *testing.T) {
+	p, _ := os.Getwd()
+	p = path.Join(p, "../../config/config-test.yaml")
+	os.Setenv("RIC_DMS_CONFIG_FILE", p)
+	Init()
+	assert.Equal(t, Logger.LevelGet(), golog.Level(4))
 }
 
-func (r *Restful) setupHandler() {
-	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
-	if err != nil {
-		os.Exit(1)
-	}
-
-	api := operations.NewRICDMSAPI(swaggerSpec)
-	r.api = api
-}
-
-func (r *Restful) Run() {
-	server := restapi.NewServer(r.api)
-	defer server.Shutdown()
-	server.Port = 8000
-	server.Host = "0.0.0.0"
-	ricdms.Logger.Info("Starting server at : %s:%d", server.Host, server.Port)
-	if err := server.Serve(); err != nil {
-		log.Fatal(err.Error())
-	}
+func TestLoggerWithoutConfigFile(t *testing.T) {
+	os.Unsetenv("RIC_DMS_CONFIG_FILE")
+	Init()
+	assert.Equal(t, Logger.LevelGet(), golog.Level(3))
 }

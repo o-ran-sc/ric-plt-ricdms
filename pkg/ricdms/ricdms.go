@@ -20,8 +20,33 @@
 
 package ricdms
 
+import (
+	"fmt"
+	"os"
+
+	mdclog "gerrit.o-ran-sc.org/r/com/golog"
+)
+
 type ricdms struct {
 }
 
+var Logger *mdclog.MdcLogger
+
 func Init() {
+	var err error
+	Logger, err = mdclog.InitLogger("ricdms")
+	if err != nil {
+		fmt.Println("Logger not initialized !!")
+		return
+	}
+
+	configFile := os.Getenv("RIC_DMS_CONFIG_FILE")
+
+	if configFile != "" {
+		Logger.ParseFileContent(configFile)
+		Logger.Info("Logger is initialized with config file : %s", configFile)
+	} else {
+		Logger.LevelSet(mdclog.INFO)
+		Logger.Info("Logger is initialized without config file.")
+	}
 }
