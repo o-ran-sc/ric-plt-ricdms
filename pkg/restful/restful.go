@@ -23,14 +23,22 @@ import (
 	"log"
 	"os"
 
+	ph "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/resthooks"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/go-openapi/loads"
+	"github.com/go-openapi/runtime/middleware"
 )
 
 func NewRestful() *Restful {
-	r := &Restful{}
+	r := &Restful{
+		rh: resthooks.NewResthook(
+			ph.NewHealthChecker(),
+		),
+	}
 	r.setupHandler()
 	return r
 }
@@ -42,6 +50,13 @@ func (r *Restful) setupHandler() {
 	}
 
 	api := operations.NewRICDMSAPI(swaggerSpec)
+
+	api.HealthGetHealthCheckHandler = health.GetHealthCheckHandlerFunc(func(ghcp health.GetHealthCheckParams) middleware.Responder {
+		ricdms.Logger.Debug("==> HealthCheck API invoked.")
+		resp := r.rh.GetDMSHealth()
+		return resp
+	})
+
 	r.api = api
 }
 

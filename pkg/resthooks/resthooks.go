@@ -17,12 +17,23 @@
 //   platform project (RICP).
 //==================================================================================
 //
+
 package resthooks
 
 import (
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
+	ph "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
+	"github.com/go-openapi/runtime/middleware"
 )
 
-type Resthook struct {
-	HealthChecker health.IHealthChecker
+func NewResthook(h ph.IHealthChecker) *Resthook {
+	return &Resthook{
+		HealthChecker: h,
+	}
+}
+
+func (rh *Resthook) GetDMSHealth() (resp middleware.Responder) {
+	ricdms.Logger.Debug("healthchecker : %v\n", rh.HealthChecker)
+	return health.NewGetHealthCheckOK().WithPayload(rh.HealthChecker.GetStatus())
 }

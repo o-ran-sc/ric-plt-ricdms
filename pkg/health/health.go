@@ -17,12 +17,27 @@
 //   platform project (RICP).
 //==================================================================================
 //
-package resthooks
 
-import (
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
+package health
+
+import "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
+
+var (
+	HEALTHY = "Service is running healthy"
 )
 
-type Resthook struct {
-	HealthChecker health.IHealthChecker
+type IHealthChecker interface {
+	GetStatus() *models.Status
+}
+
+type HealthChecker struct {
+}
+
+func NewHealthChecker() IHealthChecker {
+	return &HealthChecker{}
+}
+func (h *HealthChecker) GetStatus() *models.Status {
+	return &models.Status{
+		Status: &HEALTHY,
+	}
 }
