@@ -75,8 +75,12 @@ RUN mkdir -p /opt/dms \
     && chmod -R 755 /opt/dms
 
 COPY --from=dms-build /go/src/ws/cache/go/cmd/ric-dms /opt/dms/ric-dms
-
+COPY --from=dms-build /go/src/ws/config/config.yaml /opt/dms/config.yaml
 WORKDIR /opt/dms
 
 COPY dms-entrypoint.sh /opt/dms/
+
+ARG default_config=/opt/dms/config.yaml
+ENV RIC_DMS_CONFIG_FILE=$default_config
+
 ENTRYPOINT ["/opt/dms/dms-entrypoint.sh"]
