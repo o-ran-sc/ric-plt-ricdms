@@ -393,13 +393,13 @@ definitions:
     properties:
       config:
         description: represents content of config file for xApp onboarding.
-        type: string
+        type: object
       config-file_url:
         description: specify url of config-file.
         type: string
       schema:
         description: represents conent of schema file for xApp onboarding.
-        type: string
+        type: object
       schema-file_url:
         description: specify url of schema-file.
         type: string

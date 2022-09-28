@@ -24,9 +24,11 @@ import (
 	"os"
 
 	ph "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
+	po "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/resthooks"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/go-openapi/loads"
@@ -37,6 +39,7 @@ func NewRestful() *Restful {
 	r := &Restful{
 		rh: resthooks.NewResthook(
 			ph.NewHealthChecker(),
+			po.NewOnboarder(),
 		),
 	}
 	r.setupHandler()
@@ -54,6 +57,12 @@ func (r *Restful) setupHandler() {
 	api.HealthGetHealthCheckHandler = health.GetHealthCheckHandlerFunc(func(ghcp health.GetHealthCheckParams) middleware.Responder {
 		ricdms.Logger.Debug("==> HealthCheck API invoked.")
 		resp := r.rh.GetDMSHealth()
+		return resp
+	})
+
+	api.OnboardPostOnboardxAppsHandler = onboard.PostOnboardxAppsHandlerFunc(func(poap onboard.PostOnboardxAppsParams) middleware.Responder {
+		ricdms.Logger.Debug("==> onboard API invoked.")
+		resp := r.rh.OnBoard(poap.Body)
 		return resp
 	})
 

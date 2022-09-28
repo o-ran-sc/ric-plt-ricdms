@@ -20,11 +20,18 @@
 package resthooks
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 	h "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/stretchr/testify/assert"
@@ -42,6 +49,7 @@ func TestMain(m *testing.M) {
 	ricdms.Init()
 	rh = &Resthook{
 		HealthChecker: HealthCheckerMock{},
+		Onboarder:     onboard.NewOnboarder(),
 	}
 	code := m.Run()
 	os.Exit(code)
@@ -59,6 +67,39 @@ func TestHealth(t *testing.T) {
 	default:
 		assert.Fail(t, "Unknown type of resp : %v", resp)
 	}
+}
+
+func TestOnboard(t *testing.T) {
+	xApp := &models.Descriptor{
+		Config: "SAMPLE_CONFIGURATION",
+		Schema: "SAMPLE_SCHEMA",
+	}
+
+	svr := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var d map[string]interface{}
+		reqBytes, _ := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+
+		err := json.Unmarshal(reqBytes, &d)
+
+		ricdms.Logger.Debug("after unmarshal : %+v body: %+v", d, string(reqBytes))
+
+		if err != nil {
+			assert.Fail(t, "Not able to parse the request body")
+		}
+
+		assert.Equal(t, xApp.Config, d["config-file.json"])
+		assert.Equal(t, xApp.Schema, d["controls-schema.json"])
+		fmt.Fprintf(w, "SAMPLE_RESPONSE")
+	}))
+	svr.Listener.Close()
+	svr.Listener, _ = net.Listen("tcp", ricdms.Config.MockServer)
+
+	svr.Start()
+	defer svr.Close()
+
+	resp := rh.OnBoard(xApp)
+	assert.NotEqual(t, nil, resp)
 }
 
 type HealthCheckerMock struct {
