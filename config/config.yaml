@@ -13,3 +13,4 @@
 #   limitations under the License.
 #
 log-level: debug
+onborder-url: "http://service-ricplt-xapp-onboarder-http.ricplt:8888/api/v1/onboard"

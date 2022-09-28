@@ -18,41 +18,33 @@
 //==================================================================================
 //
 
-package ricdms
+package config
 
 import (
 	"fmt"
-	"os"
+	"io/ioutil"
 
-	mdclog "gerrit.o-ran-sc.org/r/com/golog"
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/config"
+	"gopkg.in/yaml.v3"
 )
 
-type ricdms struct {
+type Conf struct {
+	LogLevel   string `yaml:"log-level"`
+	OnboardURL string `yaml:"onborder-url"`
+	MockServer string `yaml:"mock-server"`
 }
 
-var Logger *mdclog.MdcLogger
-var Config *config.Conf
-
-func Init() {
-	var err error
-	Logger, err = mdclog.InitLogger("ricdms")
+func ReadConfiguration(configFile string) (c *Conf, err error) {
+	yamlFile, err := ioutil.ReadFile(configFile)
 	if err != nil {
-		fmt.Println("Logger not initialized !!")
-		return
+		fmt.Printf("error in resolving config file : %+v\n", err)
+		return nil, err
 	}
 
-	configFile := os.Getenv("RIC_DMS_CONFIG_FILE")
-
-	if configFile != "" {
-		Logger.ParseFileContent(configFile)
-		Config, err = config.ReadConfiguration(configFile)
-		if err != nil {
-			Logger.Error("Error in parsing config file: %v", err)
-		}
-		Logger.Info("Logger is initialized with config file : %s", configFile)
-	} else {
-		Logger.LevelSet(mdclog.INFO)
-		Logger.Info("Logger is initialized without config file(%s).", configFile)
+	err = yaml.Unmarshal(yamlFile, &c)
+	if err != nil {
+		fmt.Printf("Unmarshal error : %+v\n", err)
+		return nil, err
 	}
+
+	return c, err
 }
