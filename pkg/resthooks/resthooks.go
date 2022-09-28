@@ -22,18 +22,26 @@ package resthooks
 
 import (
 	ph "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/go-openapi/runtime/middleware"
 )
 
-func NewResthook(h ph.IHealthChecker) *Resthook {
+func NewResthook(h ph.IHealthChecker, o onboard.IOnboarder) *Resthook {
 	return &Resthook{
 		HealthChecker: h,
+		Onboarder:     o,
 	}
 }
 
 func (rh *Resthook) GetDMSHealth() (resp middleware.Responder) {
 	ricdms.Logger.Debug("healthchecker : %v\n", rh.HealthChecker)
 	return health.NewGetHealthCheckOK().WithPayload(rh.HealthChecker.GetStatus())
+}
+
+func (rh *Resthook) OnBoard(params *models.Descriptor) (resp middleware.Responder) {
+	ricdms.Logger.Debug("onboarder: invoked")
+	return rh.Onboarder.Onboard(params)
 }

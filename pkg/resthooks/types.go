@@ -21,8 +21,10 @@ package resthooks
 
 import (
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 )
 
 type Resthook struct {
 	HealthChecker health.IHealthChecker
+	Onboarder     onboard.IOnboarder
 }
