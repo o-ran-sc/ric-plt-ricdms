@@ -21,18 +21,21 @@
 package resthooks
 
 import (
+	ch "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
 	ph "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/charts"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/go-openapi/runtime/middleware"
 )
 
-func NewResthook(h ph.IHealthChecker, o onboard.IOnboarder) *Resthook {
+func NewResthook(h ph.IHealthChecker, o onboard.IOnboarder, chMgr ch.IChartMgr) *Resthook {
 	return &Resthook{
 		HealthChecker: h,
 		Onboarder:     o,
+		ChartMgr:      chMgr,
 	}
 }
 
@@ -44,4 +47,14 @@ func (rh *Resthook) GetDMSHealth() (resp middleware.Responder) {
 func (rh *Resthook) OnBoard(params *models.Descriptor) (resp middleware.Responder) {
 	ricdms.Logger.Debug("onboarder: invoked")
 	return rh.Onboarder.Onboard(params)
+}
+
+func (rh *Resthook) GetCharts() (resp middleware.Responder) {
+	ricdms.Logger.Debug("getcharts: invoked")
+	chartList, err := rh.ChartMgr.GetCharts()
+
+	if err != nil {
+		return charts.NewGetChartsListInternalServerError()
+	}
+	return charts.NewGetChartsListOK().WithPayload(chartList)
 }

@@ -23,10 +23,12 @@ import (
 	"log"
 	"os"
 
+	ch "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
 	ph "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
 	po "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/charts"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/resthooks"
@@ -40,6 +42,7 @@ func NewRestful() *Restful {
 		rh: resthooks.NewResthook(
 			ph.NewHealthChecker(),
 			po.NewOnboarder(),
+			ch.NewChartmgr(),
 		),
 	}
 	r.setupHandler()
@@ -63,6 +66,12 @@ func (r *Restful) setupHandler() {
 	api.OnboardPostOnboardxAppsHandler = onboard.PostOnboardxAppsHandlerFunc(func(poap onboard.PostOnboardxAppsParams) middleware.Responder {
 		ricdms.Logger.Debug("==> onboard API invoked.")
 		resp := r.rh.OnBoard(poap.Body)
+		return resp
+	})
+
+	api.ChartsGetChartsListHandler = charts.GetChartsListHandlerFunc(func(param charts.GetChartsListParams) middleware.Responder {
+		ricdms.Logger.Debug("==> GetChartList")
+		resp := r.rh.GetCharts()
 		return resp
 	})
 
