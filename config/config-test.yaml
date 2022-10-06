@@ -15,3 +15,4 @@
 log-level: debug
 onborder-url: "http://127.0.0.1:9191"
 mock-server: "127.0.0.1:9191"
+getCharts-url: "http://127.0.0.1:9191"

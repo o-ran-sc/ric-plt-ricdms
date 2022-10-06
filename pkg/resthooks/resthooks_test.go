@@ -29,9 +29,11 @@ import (
 	"os"
 	"testing"
 
+	ch "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/charts"
 	h "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/stretchr/testify/assert"
@@ -50,6 +52,7 @@ func TestMain(m *testing.M) {
 	rh = &Resthook{
 		HealthChecker: HealthCheckerMock{},
 		Onboarder:     onboard.NewOnboarder(),
+		ChartMgr:      ch.NewChartmgr(),
 	}
 	code := m.Run()
 	os.Exit(code)
@@ -100,6 +103,25 @@ func TestOnboard(t *testing.T) {
 
 	resp := rh.OnBoard(xApp)
 	assert.NotEqual(t, nil, resp)
+}
+
+func TestGetCharts(t *testing.T) {
+
+	svr := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ricdms.Logger.Debug("Mock server running")
+		fmt.Fprintf(w, "SAMPLE_RESPONSE")
+	}))
+	svr.Listener.Close()
+	svr.Listener, _ = net.Listen("tcp", ricdms.Config.MockServer)
+
+	svr.Start()
+	defer svr.Close()
+
+	resp := rh.GetCharts()
+	assert.NotEqual(t, nil, resp)
+
+	successResp := resp.(*charts.GetChartsListOK)
+	assert.Equal(t, "SAMPLE_RESPONSE", successResp.Payload)
 }
 
 type HealthCheckerMock struct {

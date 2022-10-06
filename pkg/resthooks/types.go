@@ -20,6 +20,7 @@
 package resthooks
 
 import (
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 )
@@ -27,4 +28,5 @@ import (
 type Resthook struct {
 	HealthChecker health.IHealthChecker
 	Onboarder     onboard.IOnboarder
+	ChartMgr      charts.IChartMgr
 }

@@ -14,3 +14,4 @@
 #
 log-level: debug
 onborder-url: "http://service-ricplt-xapp-onboarder-http.ricplt:8888/api/v1/onboard"
+getCharts-url: "http://service-ricplt-xapp-onboarder-http.ricplt:8080/api/charts"

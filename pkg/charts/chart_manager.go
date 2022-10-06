@@ -18,34 +18,43 @@
 //==================================================================================
 //
 
-package config
+package charts
 
 import (
-	"fmt"
 	"io/ioutil"
+	"net/http"
 
-	"gopkg.in/yaml.v3"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 )
 
-type Conf struct {
-	LogLevel     string `yaml:"log-level"`
-	OnboardURL   string `yaml:"onborder-url"`
-	GetChartsURL string `yaml:"getCharts-url"`
-	MockServer   string `yaml:"mock-server"`
+type ChartMgr struct {
 }
 
-func ReadConfiguration(configFile string) (c *Conf, err error) {
-	yamlFile, err := ioutil.ReadFile(configFile)
+type IChartMgr interface {
+	GetCharts() (string, error)
+}
+
+func NewChartmgr() IChartMgr {
+	return &ChartMgr{}
+}
+
+func (c *ChartMgr) GetCharts() (string, error) {
+	ricdms.Logger.Debug("GetCharts invoked")
+
+	resp, err := http.Get(ricdms.Config.GetChartsURL)
 	if err != nil {
-		fmt.Printf("error in resolving config file : %+v\n", err)
-		return nil, err
+		ricdms.Logger.Debug("Error in getting charts : %+v", err)
+		return "", err
 	}
 
-	err = yaml.Unmarshal(yamlFile, &c)
+	defer resp.Body.Close()
+	respByte, err := ioutil.ReadAll(resp.Body)
+
 	if err != nil {
-		fmt.Printf("Unmarshal error : %+v\n", err)
-		return nil, err
+		ricdms.Logger.Debug("error in response: %+v", respByte)
+		return "", err
 	}
 
-	return c, err
+	ricdms.Logger.Debug("response : %+v", string(respByte))
+	return string(respByte), nil
 }
