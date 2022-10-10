@@ -58,3 +58,15 @@ func (rh *Resthook) GetCharts() (resp middleware.Responder) {
 	}
 	return charts.NewGetChartsListOK().WithPayload(chartList)
 }
+
+func (rh *Resthook) DownloadChart(chartname, version string) (resp middleware.Responder) {
+	ricdms.Logger.Debug("DownloadCharts: invoked")
+	reader, err := rh.ChartMgr.DownloadChart(chartname, version)
+
+	if err != nil {
+		ricdms.Logger.Error("Error : %v", err)
+		return charts.NewDownloadHelmChartInternalServerError()
+	}
+
+	return charts.NewDownloadHelmChartOK().WithPayload(reader)
+}

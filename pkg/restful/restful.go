@@ -75,6 +75,12 @@ func (r *Restful) setupHandler() {
 		return resp
 	})
 
+	api.ChartsDownloadHelmChartHandler = charts.DownloadHelmChartHandlerFunc(func(param charts.DownloadHelmChartParams) middleware.Responder {
+		ricdms.Logger.Debug("==> Download helm chart")
+		resp := r.rh.DownloadChart(param.XAppName, param.Version)
+		return resp
+	})
+
 	r.api = api
 }
 

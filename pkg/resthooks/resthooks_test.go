@@ -22,11 +22,13 @@ package resthooks
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 
 	ch "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
@@ -122,6 +124,24 @@ func TestGetCharts(t *testing.T) {
 
 	successResp := resp.(*charts.GetChartsListOK)
 	assert.Equal(t, "SAMPLE_RESPONSE", successResp.Payload)
+}
+
+func TestDownloadChart(t *testing.T) {
+	svr := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ricdms.Logger.Debug("request received by mock to download chart")
+		reader := strings.NewReader("SAMPLE_RESPONSE")
+		data, _ := io.ReadAll(reader)
+		ricdms.Logger.Debug("writing : %+v", data)
+		w.Write(data)
+	}))
+	svr.Listener.Close()
+	svr.Listener, _ = net.Listen("tcp", ricdms.Config.MockServer)
+
+	svr.Start()
+	defer svr.Close()
+
+	resp := rh.DownloadChart("CHART_NAME", "VERSION")
+	assert.IsType(t, &charts.DownloadHelmChartOK{}, resp, "response did not match type")
 }
 
 type HealthCheckerMock struct {

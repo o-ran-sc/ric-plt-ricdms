@@ -140,7 +140,7 @@ paths:
         '200':
           description: Get helm chart package OK
           schema:
-            type: object
+            type: file
         '500':
           description: Get helm chart package failed
           schema:

@@ -21,6 +21,8 @@
 package charts
 
 import (
+	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 
@@ -32,6 +34,7 @@ type ChartMgr struct {
 
 type IChartMgr interface {
 	GetCharts() (string, error)
+	DownloadChart(string, string) (io.ReadCloser, error)
 }
 
 func NewChartmgr() IChartMgr {
@@ -57,4 +60,21 @@ func (c *ChartMgr) GetCharts() (string, error) {
 
 	ricdms.Logger.Debug("response : %+v", string(respByte))
 	return string(respByte), nil
+}
+
+func (c *ChartMgr) DownloadChart(chartName string, version string) (io.ReadCloser, error) {
+	ricdms.Logger.Debug("Download Charts invoked")
+
+	if chartName == "" || version == "" {
+		return nil, fmt.Errorf("chartname or version is empty")
+	}
+
+	ChartURL := fmt.Sprintf(ricdms.Config.DownloadChartURLFormat, chartName, version)
+
+	resp, err := http.Get(ChartURL)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Request.Body, nil
 }

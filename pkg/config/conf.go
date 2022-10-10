@@ -28,10 +28,11 @@ import (
 )
 
 type Conf struct {
-	LogLevel     string `yaml:"log-level"`
-	OnboardURL   string `yaml:"onborder-url"`
-	GetChartsURL string `yaml:"getCharts-url"`
-	MockServer   string `yaml:"mock-server"`
+	LogLevel               string `yaml:"log-level"`
+	OnboardURL             string `yaml:"onborder-url"`
+	GetChartsURL           string `yaml:"getCharts-url"`
+	DownloadChartURLFormat string `yaml:"download-charts-url-format"`
+	MockServer             string `yaml:"mock-server"`
 }
 
 func ReadConfiguration(configFile string) (c *Conf, err error) {
