@@ -31,6 +31,7 @@ type Conf struct {
 	LogLevel               string `yaml:"log-level"`
 	OnboardURL             string `yaml:"onborder-url"`
 	GetChartsURL           string `yaml:"getCharts-url"`
+	GetChartsByxAppNameURL string `yaml:"getCharts-by-name-url"`
 	DownloadChartURLFormat string `yaml:"download-charts-url-format"`
 	MockServer             string `yaml:"mock-server"`
 }

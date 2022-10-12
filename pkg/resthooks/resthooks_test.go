@@ -28,6 +28,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -142,6 +143,34 @@ func TestDownloadChart(t *testing.T) {
 
 	resp := rh.DownloadChart("CHART_NAME", "VERSION")
 	assert.IsType(t, &charts.DownloadHelmChartOK{}, resp, "response did not match type")
+}
+
+func TestGetChartsByName(t *testing.T) {
+	svr := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ricdms.Logger.Debug("request received by mock to get chart by name")
+		path, _ := filepath.Abs("./mocks/resp-get-charts-by-name.json")
+		file, err := os.Open(path)
+
+		if err != nil {
+			ricdms.Logger.Error("error in reading file: %v", err)
+		}
+
+		jsonData, err := io.ReadAll(file)
+		if err != nil {
+			ricdms.Logger.Error("Error in rading file: %v", err)
+		}
+		w.Write(jsonData)
+	}))
+
+	svr.Listener.Close()
+	svr.Listener, _ = net.Listen("tcp", ricdms.Config.MockServer)
+
+	svr.Start()
+	defer svr.Close()
+
+	resp := rh.GetChartsByName("TEST_NAME")
+	ricdms.Logger.Debug("resp Data: %s", resp.(*charts.GetChartOK).Payload...)
+	assert.IsType(t, &charts.GetChartOK{}, resp, "response did not match type")
 }
 
 type HealthCheckerMock struct {

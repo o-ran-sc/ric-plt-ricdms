@@ -70,3 +70,20 @@ func (rh *Resthook) DownloadChart(chartname, version string) (resp middleware.Re
 
 	return charts.NewDownloadHelmChartOK().WithPayload(reader)
 }
+
+func (rh *Resthook) GetChartsByName(name string) middleware.Responder {
+	ricdms.Logger.Debug("GetChartByName: invoked")
+	res, err := rh.ChartMgr.GetChartsByName(name)
+
+	if err != nil {
+		ricdms.Logger.Error("error: %v", err)
+		return charts.NewGetChartInternalServerError()
+	}
+
+	response := make([]interface{}, 0)
+	for _, item := range res {
+		response = append(response, item)
+	}
+
+	return charts.NewGetChartOK().WithPayload(response)
+}

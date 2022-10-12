@@ -81,6 +81,12 @@ func (r *Restful) setupHandler() {
 		return resp
 	})
 
+	api.ChartsGetChartHandler = charts.GetChartHandlerFunc(func(param charts.GetChartParams) middleware.Responder {
+		ricdms.Logger.Debug("==> Get Charts by name is invoked")
+		resp := r.rh.GetChartsByName(param.XAppName)
+		return resp
+	})
+
 	r.api = api
 }
 

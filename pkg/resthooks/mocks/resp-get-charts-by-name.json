@@ -1,0 +1,14 @@
+[
+  {
+    "name": "hw-go",
+    "version": "1.0.0",
+    "description": "Standard xApp Helm Chart",
+    "apiVersion": "v1",
+    "appVersion": "1.0",
+    "urls": [
+      "charts/hw-go-1.0.0.tgz"
+    ],
+    "created": "2022-09-19T08:12:55.54057053Z",
+    "digest": "f155d6c356bdcd1e3bcc1dd3df080e25a62b6e8ee32c289c5f20dec1af9c96de"
+  }
+]

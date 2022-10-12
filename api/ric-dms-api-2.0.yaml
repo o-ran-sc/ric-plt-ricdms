@@ -87,7 +87,9 @@ paths:
         '200':
           description: Get helm chart
           schema:
-            type: object
+            type: array
+            items:
+              type: object
         '500':
           description: Get helm chart failed
           schema:
