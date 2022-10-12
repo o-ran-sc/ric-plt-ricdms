@@ -87,3 +87,14 @@ func (rh *Resthook) GetChartsByName(name string) middleware.Responder {
 
 	return charts.NewGetChartOK().WithPayload(response)
 }
+
+func (rh *Resthook) GetChartByNameAndVersion(name, version string) middleware.Responder {
+	ricdms.Logger.Debug("GetChartByNameAndVersion is invoked")
+	resp, err := rh.ChartMgr.GetChartsByNameAndVersion(name, version)
+
+	if err != nil {
+		return charts.NewGetChartsFetcherInternalServerError()
+	}
+
+	return charts.NewGetChartsFetcherOK().WithPayload(resp)
+}

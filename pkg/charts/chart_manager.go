@@ -37,6 +37,7 @@ type IChartMgr interface {
 	GetCharts() (string, error)
 	DownloadChart(string, string) (io.ReadCloser, error)
 	GetChartsByName(name string) ([]map[string]interface{}, error)
+	GetChartsByNameAndVersion(name, version string) (map[string]interface{}, error)
 }
 
 func NewChartmgr() IChartMgr {
@@ -110,5 +111,38 @@ func (c *ChartMgr) GetChartsByName(name string) ([]map[string]interface{}, error
 		ricdms.Logger.Debug("Error while parsing res: %v", err)
 		return make([]map[string]interface{}, 0), err
 	}
+	return v, nil
+}
+
+func (c *ChartMgr) GetChartsByNameAndVersion(name, version string) (map[string]interface{}, error) {
+	ricdms.Logger.Debug("Get Charts by name and version is invoked")
+
+	if name == "" || version == "" {
+		return make(map[string]interface{}, 0), fmt.Errorf("name or version is not provided")
+	}
+
+	URL := fmt.Sprintf(ricdms.Config.GetChartsByNameAndVersionURL, name, version)
+
+	response, err := http.Get(URL)
+	if err != nil {
+		ricdms.Logger.Debug("error in retrieving chart: %v", err)
+		return make(map[string]interface{}, 0), err
+	}
+
+	defer response.Body.Close()
+	data, err := ioutil.ReadAll(response.Body)
+
+	if err != nil {
+		ricdms.Logger.Debug("error in reading response: %v", err)
+		return make(map[string]interface{}, 0), err
+	}
+
+	v := make(map[string]interface{}, 0)
+	err = json.Unmarshal(data, &v)
+	if err != nil {
+		ricdms.Logger.Debug("error in parsing response: %v", err)
+		return make(map[string]interface{}, 0), err
+	}
+
 	return v, nil
 }

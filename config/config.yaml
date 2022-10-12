@@ -17,3 +17,4 @@ onborder-url: "http://service-ricplt-xapp-onboarder-http.ricplt:8888/api/v1/onbo
 getCharts-url: "http://service-ricplt-xapp-onboarder-http.ricplt:8080/api/charts"
 download-charts-url-format: "http://service-ricplt-xapp-onboarder-http.ricplt:8080/charts/%s-%s.tgz"
 getCharts-by-name-url: "http://172.17.0.1:9100/helmrepo/api/charts/%s"
+getCharts-by-name-and-version-url: "http://172.17.0.1:9100/helmrepo/api/charts/%s/%s"

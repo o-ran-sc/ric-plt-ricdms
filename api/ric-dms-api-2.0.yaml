@@ -128,7 +128,6 @@ paths:
     get:
       produces:
         - application/json
-        - application/gzip
       parameters:
         - in: path
           name: xApp_name
@@ -140,11 +139,11 @@ paths:
           type: string
       responses:
         '200':
-          description: Get helm chart package OK
+          description: Get helm chart details OK
           schema:
-            type: file
+            type: object
         '500':
-          description: Get helm chart package failed
+          description: Get helm chart details failed
           schema:
             $ref: '#/definitions/error_message'
       tags:
