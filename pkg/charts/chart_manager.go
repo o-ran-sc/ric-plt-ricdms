@@ -34,7 +34,7 @@ type ChartMgr struct {
 }
 
 type IChartMgr interface {
-	GetCharts() (string, error)
+	GetCharts() (map[string]interface{}, error)
 	DownloadChart(string, string) (io.ReadCloser, error)
 	GetChartsByName(name string) ([]map[string]interface{}, error)
 	GetChartsByNameAndVersion(name, version string) (map[string]interface{}, error)
@@ -44,13 +44,13 @@ func NewChartmgr() IChartMgr {
 	return &ChartMgr{}
 }
 
-func (c *ChartMgr) GetCharts() (string, error) {
+func (c *ChartMgr) GetCharts() (map[string]interface{}, error) {
 	ricdms.Logger.Debug("GetCharts invoked")
 
 	resp, err := http.Get(ricdms.Config.GetChartsURL)
 	if err != nil {
 		ricdms.Logger.Debug("Error in getting charts : %+v", err)
-		return "", err
+		return make(map[string]interface{}, 0), err
 	}
 
 	defer resp.Body.Close()
@@ -58,11 +58,14 @@ func (c *ChartMgr) GetCharts() (string, error) {
 
 	if err != nil {
 		ricdms.Logger.Debug("error in response: %+v", respByte)
-		return "", err
+		return make(map[string]interface{}, 0), err
 	}
 
 	ricdms.Logger.Debug("response : %+v", string(respByte))
-	return string(respByte), nil
+
+	v := make(map[string]interface{}, 0)
+	json.Unmarshal(respByte, &v)
+	return v, nil
 }
 
 func (c *ChartMgr) DownloadChart(chartName string, version string) (io.ReadCloser, error) {
