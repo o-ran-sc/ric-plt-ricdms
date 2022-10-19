@@ -82,7 +82,7 @@ func (c *ChartMgr) DownloadChart(chartName string, version string) (io.ReadClose
 		return nil, err
 	}
 
-	return resp.Request.Body, nil
+	return resp.Body, nil
 }
 
 func (c *ChartMgr) GetChartsByName(name string) ([]map[string]interface{}, error) {

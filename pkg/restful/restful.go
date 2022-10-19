@@ -20,6 +20,9 @@
 package restful
 
 import (
+	"fmt"
+	"io"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -34,6 +37,7 @@ import (
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/resthooks"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/go-openapi/loads"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 )
 
@@ -93,6 +97,25 @@ func (r *Restful) setupHandler() {
 		return resp
 	})
 
+	api.ApplicationZipProducer = runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
+		if zp, ok := data.(io.ReadCloser); ok {
+			defer zp.Close()
+			b, err := ioutil.ReadAll(zp)
+
+			if err != nil {
+				ricdms.Logger.Error("error: %v", err)
+				return err
+			}
+			_, err = w.Write(b)
+
+			if err != nil {
+				ricdms.Logger.Error("error: %v", err)
+				return err
+			}
+			return nil
+		}
+		return fmt.Errorf("not support")
+	})
 	r.api = api
 }
 
