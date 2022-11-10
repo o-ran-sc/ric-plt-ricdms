@@ -33,10 +33,12 @@ import (
 	"testing"
 
 	ch "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/deploy"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/charts"
+	d "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/deploy"
 	h "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/stretchr/testify/assert"
@@ -56,6 +58,7 @@ func TestMain(m *testing.M) {
 		HealthChecker: HealthCheckerMock{},
 		Onboarder:     onboard.NewOnboarder(),
 		ChartMgr:      ch.NewChartmgr(),
+		DeployMgr:     deploy.NewDeploymentManager(),
 	}
 	code := m.Run()
 	os.Exit(code)
@@ -199,6 +202,14 @@ func TestGetChartsByNameAndVersion(t *testing.T) {
 	resp := rh.GetChartByNameAndVersion("Test", "1.0.0")
 	ricdms.Logger.Debug("resp data: %s", resp.(*charts.GetChartsFetcherOK).Payload)
 	assert.IsType(t, &charts.GetChartsFetcherOK{}, resp, "response did not match type")
+}
+
+func TestDownloadAndInstall(t *testing.T) {
+	response := rh.DownloadAndInstallChart("sample app", "1.0.0", "test")
+	if _, ok := response.(*d.PostDeployInternalServerError); !ok {
+		assert.Fail(t, "response type did not match (actual) %T", response)
+	}
+
 }
 
 type HealthCheckerMock struct {

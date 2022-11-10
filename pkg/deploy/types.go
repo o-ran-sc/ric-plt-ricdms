@@ -17,18 +17,11 @@
 //   platform project (RICP).
 //==================================================================================
 //
-package resthooks
 
-import (
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/deploy"
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
-	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
-)
+package deploy
 
-type Resthook struct {
-	HealthChecker health.IHealthChecker
-	Onboarder     onboard.IOnboarder
-	ChartMgr      charts.IChartMgr
-	DeployMgr     deploy.IDeploy
+import "io"
+
+type IDeploy interface {
+	Deploy(reader io.ReadCloser, appname, version, namespace string) error
 }
