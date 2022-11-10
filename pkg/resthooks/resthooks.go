@@ -22,20 +22,23 @@ package resthooks
 
 import (
 	ch "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/deploy"
 	ph "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/charts"
+	dp "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/deploy"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/go-openapi/runtime/middleware"
 )
 
-func NewResthook(h ph.IHealthChecker, o onboard.IOnboarder, chMgr ch.IChartMgr) *Resthook {
+func NewResthook(h ph.IHealthChecker, o onboard.IOnboarder, chMgr ch.IChartMgr, depMgr deploy.IDeploy) *Resthook {
 	return &Resthook{
 		HealthChecker: h,
 		Onboarder:     o,
 		ChartMgr:      chMgr,
+		DeployMgr:     depMgr,
 	}
 }
 
@@ -97,4 +100,20 @@ func (rh *Resthook) GetChartByNameAndVersion(name, version string) middleware.Re
 	}
 
 	return charts.NewGetChartsFetcherOK().WithPayload(resp)
+}
+
+func (rh *Resthook) DownloadAndInstallChart(appname, version, namespace string) middleware.Responder {
+	ricdms.Logger.Debug("DownloadAndInstall Chart is invoked")
+	reader, err := rh.ChartMgr.DownloadChart(appname, version)
+
+	if err != nil {
+		ricdms.Logger.Error("error in downloading the chart : %v", err)
+		return dp.NewPostDeployInternalServerError()
+	}
+
+	err = rh.DeployMgr.Deploy(reader, appname, version, namespace)
+	if err != nil {
+		return dp.NewPostDeployInternalServerError()
+	}
+	return dp.NewPostDeployCreated()
 }
