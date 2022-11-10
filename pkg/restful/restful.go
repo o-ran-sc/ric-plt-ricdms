@@ -27,11 +27,13 @@ import (
 	"os"
 
 	ch "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
+	dm "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/deploy"
 	ph "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
 	po "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/charts"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/deploy"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/resthooks"
@@ -47,6 +49,7 @@ func NewRestful() *Restful {
 			ph.NewHealthChecker(),
 			po.NewOnboarder(),
 			ch.NewChartmgr(),
+			dm.NewDeploymentManager(),
 		),
 	}
 	r.setupHandler()
@@ -94,6 +97,12 @@ func (r *Restful) setupHandler() {
 	api.ChartsGetChartsFetcherHandler = charts.GetChartsFetcherHandlerFunc(func(param charts.GetChartsFetcherParams) middleware.Responder {
 		ricdms.Logger.Debug("==> Get Charts by name and version is invoked")
 		resp := r.rh.GetChartByNameAndVersion(param.XAppName, param.Version)
+		return resp
+	})
+
+	api.DeployPostDeployHandler = deploy.PostDeployHandlerFunc(func(param deploy.PostDeployParams) middleware.Responder {
+		ricdms.Logger.Debug("==> deployment of xApp")
+		resp := r.rh.DownloadAndInstallChart(param.Body.XAppname, param.Body.Version, *param.Body.Namespace)
 		return resp
 	})
 

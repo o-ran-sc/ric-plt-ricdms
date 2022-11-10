@@ -35,7 +35,7 @@ type ChartMgr struct {
 
 type IChartMgr interface {
 	GetCharts() (map[string]interface{}, error)
-	DownloadChart(string, string) (io.ReadCloser, error)
+	DownloadChart(chartName string, version string) (io.ReadCloser, error)
 	GetChartsByName(name string) ([]map[string]interface{}, error)
 	GetChartsByNameAndVersion(name, version string) (map[string]interface{}, error)
 }

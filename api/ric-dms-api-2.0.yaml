@@ -218,7 +218,7 @@ paths:
           description: successful deployment of xApp
           schema:
             type: object
-        '501':
+        '500':
           description: deployment failed
           schema:
             $ref: '#/definitions/error_message'
