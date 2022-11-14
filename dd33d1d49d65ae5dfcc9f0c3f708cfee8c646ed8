@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "95b2b7f1_da3c6e5b",
+        "filename": "Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2022-11-14T08:37:13Z",
+      "side": 1,
+      "message": "Modified to have only one. It was repetitive.",
+      "parentUuid": "367f847e_8246aa13",
+      "revId": "dd33d1d49d65ae5dfcc9f0c3f708cfee8c646ed8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb9380d5_c05ee2e7",
         "filename": "Dockerfile",
         "patchSetId": 1
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "586864a1_51d57d15",
+        "filename": "Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2022-11-14T08:37:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb9380d5_c05ee2e7",
+      "revId": "dd33d1d49d65ae5dfcc9f0c3f708cfee8c646ed8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "873d3819_79df26c2",
         "filename": "Dockerfile",
         "patchSetId": 1
@@ -48,6 +84,24 @@
       "writtenOn": "2022-11-14T08:28:07Z",
       "side": 1,
       "message": "these comments can be removed.",
+      "revId": "dd33d1d49d65ae5dfcc9f0c3f708cfee8c646ed8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d39f114c_e1247a9f",
+        "filename": "Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2022-11-14T08:37:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "873d3819_79df26c2",
       "revId": "dd33d1d49d65ae5dfcc9f0c3f708cfee8c646ed8",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
