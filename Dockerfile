@@ -14,7 +14,7 @@
 
 #-----------------------------------------------------------
 
-FROM nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-ubuntu18-c-go:1.9.0 AS dms-build
+FROM nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-ubuntu20-c-go:1.1.0 AS dms-build
 
 RUN apt-get update -y && apt-get install -y jq
 
@@ -50,8 +50,12 @@ COPY . /go/src/ws
 # Generate Swagger code
 RUN /go/bin/swagger generate server -f api/ric-dms-api-2.0.yaml -t pkg/ --exclude-main
 
+RUN go mod download
+
 # Build the code
-RUN GO111MODULE=on GO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/src/ws/cache/go/cmd/ric-dms cmd/ric-dms.go
+#RUN go get -u github.com/micro/go-micro
+#RUN GO111MODULE=on GO_ENABLED=0 GOOS=linux go build cmd/ric-dms.go
+RUN go build -a -installsuffix cgo -o /go/src/ws/cache/go/cmd/ric-dms cmd/ric-dms.go
 
 # Run unit tests
 #RUN GO111MODULE=on GO_ENABLED=0 GOOS=linux go test -p 1 -cover ./pkg/resthooks/
@@ -62,7 +66,7 @@ CMD ["/bin/bash"]
 
 
 #----------------------------------------------------------
-FROM ubuntu:18.04 as ric-dms
+FROM ubuntu:20.04 as ric-dms
 
 RUN apt-get update -y \
     && apt-get install --reinstall -y sudo openssl ca-certificates ca-cacert \
