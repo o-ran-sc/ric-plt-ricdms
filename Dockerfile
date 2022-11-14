@@ -54,7 +54,8 @@ RUN /go/bin/swagger generate server -f api/ric-dms-api-2.0.yaml -t pkg/ --exclud
 RUN go build -a -installsuffix cgo -o /go/src/ws/cache/go/cmd/ric-dms cmd/ric-dms.go
 
 # Run unit tests
-#RUN GO111MODULE=on GO_ENABLED=0 GOOS=linux go test -p 1 -cover ./pkg/resthooks/
+ENV RIC_DMS_CONFIG_FILE=/go/src/ws/config/config-test.yaml
+RUN go test -p 1 -cover ./pkg/resthooks/
 
 RUN gofmt -l $(find cmd/ pkg/  -name '*.go' -not -name '*_test.go')
 

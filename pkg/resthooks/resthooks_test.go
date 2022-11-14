@@ -126,8 +126,9 @@ func TestGetCharts(t *testing.T) {
 	resp := rh.GetCharts()
 	assert.NotEqual(t, nil, resp)
 
-	successResp := resp.(*charts.GetChartsListOK)
-	assert.Equal(t, "SAMPLE_RESPONSE", successResp.Payload)
+	if _, ok := resp.(*charts.GetChartsListOK); !ok {
+		assert.Fail(t, "response type did not match : %t", resp)
+	}
 }
 
 func TestDownloadChart(t *testing.T) {
