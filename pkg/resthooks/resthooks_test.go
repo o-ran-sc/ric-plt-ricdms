@@ -42,7 +42,6 @@ import (
 	h "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 var rh *Resthook
@@ -55,7 +54,7 @@ func TestMain(m *testing.M) {
 	}
 	ricdms.Init()
 	rh = &Resthook{
-		HealthChecker: HealthCheckerMock{},
+		HealthChecker: health.NewHealthChecker(),
 		Onboarder:     onboard.NewOnboarder(),
 		ChartMgr:      ch.NewChartmgr(),
 		DeployMgr:     deploy.NewDeploymentManager(),
@@ -66,6 +65,54 @@ func TestMain(m *testing.M) {
 
 func TestHealth(t *testing.T) {
 	resp := rh.GetDMSHealth()
+	switch resp.(type) {
+	case *h.GetHealthCheckOK:
+		assert.Equal(t, successStatus, resp.(*h.GetHealthCheckOK).Payload)
+
+	case *h.GetHealthCheckInternalServerError:
+		assert.Fail(t, "Internal Server generated: %v", resp)
+
+	default:
+		assert.Fail(t, "Unknown type of resp : %v", resp)
+	}
+}
+
+func TestHealthxAppFail(t *testing.T) {
+	svr := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(501)
+	}))
+
+	svr.Listener.Close()
+	svr.Listener, _ = net.Listen("tcp", ricdms.Config.MockServer)
+
+	svr.Start()
+	defer svr.Close()
+
+	resp := rh.GetxAppHealth("test", "test")
+	switch resp.(type) {
+	case *h.GetHealthCheckOK:
+		assert.Fail(t, "Health check should not be okay: %v", resp)
+
+	case *h.GetHealthCheckInternalServerError:
+		break
+
+	default:
+		assert.Fail(t, "Unknown type of resp : %v", resp)
+	}
+}
+
+func TestHealthxApp(t *testing.T) {
+	svr := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
+	}))
+
+	svr.Listener.Close()
+	svr.Listener, _ = net.Listen("tcp", ricdms.Config.MockServer)
+
+	svr.Start()
+	defer svr.Close()
+
+	resp := rh.GetxAppHealth("test", "test")
 	switch resp.(type) {
 	case *h.GetHealthCheckOK:
 		assert.Equal(t, successStatus, resp.(*h.GetHealthCheckOK).Payload)
@@ -211,12 +258,4 @@ func TestDownloadAndInstall(t *testing.T) {
 		assert.Fail(t, "response type did not match (actual) %T", response)
 	}
 
-}
-
-type HealthCheckerMock struct {
-	mock.Mock
-}
-
-func (h HealthCheckerMock) GetStatus() *models.Status {
-	return successStatus
 }

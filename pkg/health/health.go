@@ -20,7 +20,13 @@
 
 package health
 
-import "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
+import (
+	"fmt"
+	"net/http"
+
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
+)
 
 var (
 	HEALTHY = "Service is running healthy"
@@ -28,6 +34,7 @@ var (
 
 type IHealthChecker interface {
 	GetStatus() *models.Status
+	GetxAppStatus(appName, namespace string) *models.Status
 }
 
 type HealthChecker struct {
@@ -37,6 +44,23 @@ func NewHealthChecker() IHealthChecker {
 	return &HealthChecker{}
 }
 func (h *HealthChecker) GetStatus() *models.Status {
+	return &models.Status{
+		Status: &HEALTHY,
+	}
+}
+
+func (h *HealthChecker) GetxAppStatus(appName, namespace string) *models.Status {
+	resp, err := http.Get(fmt.Sprintf(ricdms.Config.GETxAPPHealthURL, appName, namespace))
+	if err != nil {
+		ricdms.Logger.Error("Received error while fetching health info: %v", err)
+		return nil
+	}
+
+	if resp.StatusCode/100 != 2 {
+		ricdms.Logger.Error("xApp is not healthy (http status=%s)", resp.Status)
+		return nil
+	}
+
 	return &models.Status{
 		Status: &HEALTHY,
 	}
