@@ -70,6 +70,12 @@ func (r *Restful) setupHandler() {
 		return resp
 	})
 
+	api.HealthGetHealthcheckXAppXAppNameNamespaceNamespaceHandler = health.GetHealthcheckXAppXAppNameNamespaceNamespaceHandlerFunc(func(param health.GetHealthcheckXAppXAppNameNamespaceNamespaceParams) middleware.Responder {
+		ricdms.Logger.Debug("==> Healthcheck for xApp is invoked")
+		resp := r.rh.GetxAppHealth(param.XAppName, param.Namespace)
+		return resp
+	})
+
 	api.OnboardPostOnboardxAppsHandler = onboard.PostOnboardxAppsHandlerFunc(func(poap onboard.PostOnboardxAppsParams) middleware.Responder {
 		ricdms.Logger.Debug("==> onboard API invoked.")
 		resp := r.rh.OnBoard(poap.Body)

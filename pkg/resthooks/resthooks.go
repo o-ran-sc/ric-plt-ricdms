@@ -47,6 +47,12 @@ func (rh *Resthook) GetDMSHealth() (resp middleware.Responder) {
 	return health.NewGetHealthCheckOK().WithPayload(rh.HealthChecker.GetStatus())
 }
 
+func (rh *Resthook) GetxAppHealth(appname, namespace string) (resp middleware.Responder) {
+	ricdms.Logger.Debug("Healthchecker: xApp health check is initiated")
+	status := rh.HealthChecker.GetxAppStatus(appname, namespace)
+	return health.NewGetHealthCheckOK().WithPayload(status)
+}
+
 func (rh *Resthook) OnBoard(params *models.Descriptor) (resp middleware.Responder) {
 	ricdms.Logger.Debug("onboarder: invoked")
 	return rh.Onboarder.Onboard(params)
