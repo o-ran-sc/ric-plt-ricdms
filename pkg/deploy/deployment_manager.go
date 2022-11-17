@@ -38,14 +38,14 @@ type DeploymentManager struct {
 const (
 	HELM_DRIVER        = "HELM_DRIVER"
 	CHART_NAME_FORMAT  = "chart-%s-%s.tgz"
-	RELESE_NAME_FORMAT = "ricdms-%s-rel"
+	RELESE_NAME_FORMAT = "ricdms-%s-rel-%s"
 )
 
 func NewDeploymentManager() IDeploy {
 	return &DeploymentManager{}
 }
 
-func (d *DeploymentManager) install(chartPath, appName, namesapce string) error {
+func (d *DeploymentManager) install(chartPath, appName, version, namesapce string) error {
 	conf := action.Configuration{}
 	err := conf.Init(d.settings.RESTClientGetter(), "namespace", os.Getenv(HELM_DRIVER), ricdms.Logger.Debug)
 
@@ -55,7 +55,7 @@ func (d *DeploymentManager) install(chartPath, appName, namesapce string) error 
 	}
 
 	install := action.NewInstall(&conf)
-	install.ReleaseName = fmt.Sprintf(RELESE_NAME_FORMAT, appName)
+	install.ReleaseName = fmt.Sprintf(RELESE_NAME_FORMAT, appName, version)
 	install.Namespace = namesapce
 
 	cp, err := install.ChartPathOptions.LocateChart(chartPath, d.settings)
@@ -105,7 +105,7 @@ func (d *DeploymentManager) Deploy(reader io.ReadCloser, appname, version, names
 		return err
 	}
 
-	err = d.install(fmt.Sprintf(CHART_NAME_FORMAT, appname, version), appname, namespace)
+	err = d.install(fmt.Sprintf(CHART_NAME_FORMAT, appname, version), appname, version, namespace)
 	if err != nil {
 		return err
 	}
