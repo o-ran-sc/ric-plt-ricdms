@@ -20,8 +20,11 @@
 
 package deploy
 
-import "io"
+import (
+	"io"
+)
 
 type IDeploy interface {
 	Deploy(reader io.ReadCloser, appname, version, namespace string) error
+	Uninstall(appname, version, namespace string) error
 }

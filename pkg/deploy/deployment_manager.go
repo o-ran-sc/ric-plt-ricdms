@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"helm.sh/helm/v3/pkg/action"
@@ -42,7 +43,9 @@ const (
 )
 
 func NewDeploymentManager() IDeploy {
-	return &DeploymentManager{}
+	return &DeploymentManager{
+		settings: cli.New(),
+	}
 }
 
 func (d *DeploymentManager) install(chartPath, appName, version, namesapce string) error {
@@ -55,7 +58,7 @@ func (d *DeploymentManager) install(chartPath, appName, version, namesapce strin
 	}
 
 	install := action.NewInstall(&conf)
-	install.ReleaseName = fmt.Sprintf(RELESE_NAME_FORMAT, appName, version)
+	install.ReleaseName = fmt.Sprintf(RELESE_NAME_FORMAT, appName, strings.ReplaceAll(version, ".", ""))
 	install.Namespace = namesapce
 
 	cp, err := install.ChartPathOptions.LocateChart(chartPath, d.settings)
@@ -109,5 +112,27 @@ func (d *DeploymentManager) Deploy(reader io.ReadCloser, appname, version, names
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (d *DeploymentManager) Uninstall(appname, version, namespace string) error {
+	conf := action.Configuration{}
+
+	err := conf.Init(d.settings.RESTClientGetter(), namespace, os.Getenv(HELM_DRIVER), ricdms.Logger.Debug)
+	if err != nil {
+		ricdms.Logger.Error("Not able to prepare uninstall configuration: %v", err)
+		return err
+	}
+
+	uninstall := action.NewUninstall(&conf)
+	uninstall.Wait = true
+
+	resp, err := uninstall.Run(fmt.Sprintf(RELESE_NAME_FORMAT, appname, strings.ReplaceAll(version, ".", "")))
+	if err != nil {
+		ricdms.Logger.Error("Error while uninstalling deployment: %v", err)
+		return err
+	}
+
+	ricdms.Logger.Info("deployment uninstallation comlete : %", resp.Info)
 	return nil
 }

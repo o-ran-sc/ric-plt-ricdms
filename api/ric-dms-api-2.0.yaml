@@ -194,7 +194,7 @@ paths:
           description: successful un-deploy xApp
           schema:
             type: object
-        '501':
+        '500':
           description: un-deployment failed
           schema:
             $ref: '#/definitions/error_message'

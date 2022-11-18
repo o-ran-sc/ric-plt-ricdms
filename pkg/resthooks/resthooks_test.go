@@ -213,6 +213,13 @@ func TestDownloadAndInstall(t *testing.T) {
 
 }
 
+func TestUninstallxApp(t *testing.T) {
+	response := rh.UninstallChart("test", "test", "test")
+	if _, ok := response.(*d.DeleteDeployInternalServerError); !ok {
+		assert.Fail(t, "response type did not match actual: %T", response)
+	}
+}
+
 type HealthCheckerMock struct {
 	mock.Mock
 }

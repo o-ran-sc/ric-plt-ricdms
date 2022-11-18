@@ -117,3 +117,14 @@ func (rh *Resthook) DownloadAndInstallChart(appname, version, namespace string) 
 	}
 	return dp.NewPostDeployCreated()
 }
+
+func (rh *Resthook) UninstallChart(appname, version, namespace string) middleware.Responder {
+	ricdms.Logger.Debug("Uninstall chart is invoked")
+	err := rh.DeployMgr.Uninstall(appname, version, namespace)
+	if err != nil {
+		ricdms.Logger.Error("Uninstall failed: %v", err)
+		return dp.NewDeleteDeployInternalServerError()
+	}
+
+	return dp.NewDeleteDeployCreated()
+}
