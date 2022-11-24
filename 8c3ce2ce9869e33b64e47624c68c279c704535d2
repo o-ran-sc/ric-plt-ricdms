@@ -16,6 +16,24 @@
       "message": "what is the statuscode for healthy status , we can directly compare with it?",
       "revId": "8c3ce2ce9869e33b64e47624c68c279c704535d2",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2debdfd_60658b45",
+        "filename": "pkg/health/health.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2022-11-24T10:17:41Z",
+      "side": 1,
+      "message": "Will modify to http.StatusOK",
+      "parentUuid": "12e8e5ba_96bac52a",
+      "revId": "8c3ce2ce9869e33b64e47624c68c279c704535d2",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
