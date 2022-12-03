@@ -50,7 +50,7 @@ func NewDeploymentManager() IDeploy {
 
 func (d *DeploymentManager) install(chartPath, appName, version, namesapce string) error {
 	conf := action.Configuration{}
-	err := conf.Init(d.settings.RESTClientGetter(), "namespace", os.Getenv(HELM_DRIVER), ricdms.Logger.Debug)
+	err := conf.Init(d.settings.RESTClientGetter(), namesapce, os.Getenv(HELM_DRIVER), ricdms.Logger.Debug)
 
 	if err != nil {
 		ricdms.Logger.Error("not able to prepare install configuration: %v", err)
