@@ -112,6 +112,11 @@ func (r *Restful) setupHandler() {
 		return resp
 	})
 
+	api.DeployDeleteDeployHandler = deploy.DeleteDeployHandlerFunc(func(param deploy.DeleteDeployParams) middleware.Responder {
+		ricdms.Logger.Debug("==> undeploy xApp")
+		resp := r.rh.UninstallChart(*param.Body.XAppname, *param.Body.Version, param.Body.Namespace)
+		return resp
+	})
 	api.ApplicationZipProducer = runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
 		if zp, ok := data.(io.ReadCloser); ok {
 			defer zp.Close()
