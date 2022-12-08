@@ -34,6 +34,41 @@
       "parentUuid": "6becba69_eb2b785f",
       "revId": "6e07dc10e23a4ac91401b3fb068aaecb467638ca",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54b298f5_f00044cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001361
+      },
+      "writtenOn": "2022-12-08T06:27:42Z",
+      "side": 1,
+      "message": "okay",
+      "parentUuid": "2dc694d0_f441c652",
+      "revId": "6e07dc10e23a4ac91401b3fb068aaecb467638ca",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2f78052_ebfcf07b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001361
+      },
+      "writtenOn": "2022-12-08T06:27:42Z",
+      "side": 1,
+      "message": "Kindly raise the lf ticket to fix the naming issue.",
+      "revId": "6e07dc10e23a4ac91401b3fb068aaecb467638ca",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
