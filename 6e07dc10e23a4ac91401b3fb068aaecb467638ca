@@ -16,6 +16,24 @@
       "message": "file name can\u0027t be fixed(renamed/ edited) : https://github.com/lfit/releng-global-jjb/blob/631a7f22a7e383d2ed5886e721cd370ff85613d4/shell/release-job.sh#L59-L65 ",
       "revId": "6e07dc10e23a4ac91401b3fb068aaecb467638ca",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dc694d0_f441c652",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2022-12-08T05:47:42Z",
+      "side": 1,
+      "message": "I will raise LF ticket to fix it.",
+      "parentUuid": "6becba69_eb2b785f",
+      "revId": "6e07dc10e23a4ac91401b3fb068aaecb467638ca",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
