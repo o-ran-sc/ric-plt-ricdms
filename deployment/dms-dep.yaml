@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: dms-server
+  labels:
+    name: dms-server
+    app: dms-server
+spec:
+  replicas: 1
+  selector:
+    app: dms-server
+  template:
+    metadata:
+      labels:
+        name: dms-server
+        app: dms-server
+    spec:
+      containers:
+      - name: dms-server
+        image: <build image name>
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 8000
+            protocol: TCP
+        volumeMounts:
+        - name: kube-config-vol
+          mountPath: /root/.kube
+          readOnly: true
+      volumes:
+        - name: kube-config-vol
+          configMap:
+            name: kube-env
