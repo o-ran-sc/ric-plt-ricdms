@@ -1,5 +1,13 @@
 # RICDMS
 
+- [RICDMS](#ricdms)
+  - [Building](#building)
+    - [Local build and Run](#local-build-and-run)
+    - [Kubernetes](#kubernetes)
+  - [Developer Environment](#developer-environment)
+    - [Mocking all the dependent services (chartmuseum, appmgr...)](#mocking-all-the-dependent-services-chartmuseum-appmgr)
+    - [Running the RICDMS](#running-the-ricdms)
+
 
 ## Building
 
@@ -79,3 +87,20 @@ NAME                         DATA   AGE
 configmap/kube-env           1      90s
 ```
 
+## Developer Environment
+
+### Mocking all the dependent services (chartmuseum, appmgr...)
+One can bring [`moco`](https://github.com/dreamhead/moco) server to mock environment for development purpose. Mocks are captured in `mock` folder.
+
+Use below command to bring up the mock server :
+```sh
+$ docker run --rm -d -v /home/ubuntu/osc/ric-plt/ricdms/mock:/var/moco -p 9191:8000 rezzza/docker-moco:latest
+```
+
+### Running the RICDMS
+Export the `` enviroment variable to use the URLs from `` so that mock server could be used.
+```bash
+$ export RIC_DMS_CONFIG_FILE=$(pwd)/config/config-test.yaml
+```
+
+Now, developer environment is ready :computer:
