@@ -27,6 +27,21 @@ host: localhost:8000
 schemes:
   - http
 paths:
+  /custom-onboard:
+    post:
+      summary: upload a file
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: upfile
+          type: file
+          description: api to upload file
+      responses:
+        '200':
+          description: successfully uploaded
+      tags:
+        - experiment
   /charts:
     get:
       produces:
