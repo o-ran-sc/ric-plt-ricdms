@@ -19,3 +19,4 @@ download-charts-url-format: "http://service-ricplt-xapp-onboarder-http.ricplt:80
 getCharts-by-name-url: "http://service-ricplt-xapp-onboarder-http:8080/api/charts/%s"
 getCharts-by-name-and-version-url: "http://service-ricplt-xapp-onboarder-http:8080/api/charts/%s/%s"
 getXappHealth-url: "http://service-ricxapp-%s-http.%s:8080/ric/v1/health/alive"
+customOnboard-url: "http://service-ricplt-xapp-onboarder-http.ricplt:8080/api/charts"

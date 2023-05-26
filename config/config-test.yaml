@@ -15,8 +15,9 @@
 log-level: debug
 onborder-url: "http://127.0.0.1:9191"
 mock-server: "127.0.0.1:9191"
-getCharts-url: "http://127.0.0.1:9191"
+getCharts-url: "http://127.0.0.1:9191/helmrepo/api/charts"
 download-charts-url-format: "http://127.0.0.1:9191/helmrepo/charts/%s-%s.tgz"
 getCharts-by-name-url: "http://127.0.0.1:9191/helmrepo/api/charts/%s"
 getCharts-by-name-and-version-url: "http://127.0.0.1:9191/helmrepo/api/charts/%s/%s"
 getXappHealth-url: "http://127.0.0.1:9191/ric/v1/health/alive/%s/%s"
+customOnboard-url: "http://127.0.0.1:37019/api/charts"

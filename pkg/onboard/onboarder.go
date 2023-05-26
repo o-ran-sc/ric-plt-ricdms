@@ -75,7 +75,7 @@ func (o *Onboarder) Onboard(descriptor *models.Descriptor) middleware.Responder 
 // onboard provided helm chart
 func (o *Onboarder) CustomOnboard(reader io.Reader) middleware.Responder {
 	ricdms.Logger.Debug("onboarder received req to onboard")
-	resp, err := http.Post("http://service-ricplt-xapp-onboarder-http.ricplt:8080/api/charts", "application/x-www-form-urlencoded", reader)
+	resp, err := http.Post(ricdms.Config.CustomOnboardURL, "application/x-www-form-urlencoded", reader)
 	if err != nil {
 		ricdms.Logger.Error("err received while onboarding chart to chartmuseum: %v", err)
 		// TODO: introcuce error in in swagger to handle the error cases.

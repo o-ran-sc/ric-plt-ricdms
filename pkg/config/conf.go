@@ -36,6 +36,7 @@ type Conf struct {
 	DownloadChartURLFormat       string `yaml:"download-charts-url-format"`
 	MockServer                   string `yaml:"mock-server"`
 	GETxAPPHealthURL             string `yaml:"getXappHealth-url"`
+	CustomOnboardURL             string `yaml:"customOnboard-url"`
 }
 
 func ReadConfiguration(configFile string) (c *Conf, err error) {
