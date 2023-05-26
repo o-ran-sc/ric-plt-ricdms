@@ -23,6 +23,7 @@ package onboard
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -69,7 +70,7 @@ func (o *Onboarder) Onboard(descriptor *models.Descriptor) middleware.Responder 
 	} else {
 		ricdms.Logger.Error("err : (%v)", err)
 	}
-	return onboard.NewPostOnboardxAppsCreated()
+	return experiment.NewPostCustomOnboardOK()
 }
 
 // onboard provided helm chart
@@ -78,15 +79,24 @@ func (o *Onboarder) CustomOnboard(reader io.Reader) middleware.Responder {
 	resp, err := http.Post(ricdms.Config.CustomOnboardURL, "application/x-www-form-urlencoded", reader)
 	if err != nil {
 		ricdms.Logger.Error("err received while onboarding chart to chartmuseum: %v", err)
-		// TODO: introcuce error in in swagger to handle the error cases.
-		return nil
+		errmsg := err.Error()
+		resp := experiment.NewPostCustomOnboardInternalServerError()
+		resp.SetPayload(&models.ErrorMessage{
+			ErrorMessage: &errmsg,
+		})
+		return resp
 	}
 
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		// TODO: return error code in response
 		ricdms.Logger.Error("chartmuseum returned bad status code(%d): %+v", resp.StatusCode, resp)
-		return nil
+		errmsg := fmt.Sprintf("chartmuseum returns status code :%d", resp.StatusCode)
+		resp := experiment.NewPostCustomOnboardInternalServerError()
+		resp.SetPayload(&models.ErrorMessage{
+			ErrorMessage: &errmsg,
+		})
+		return resp
 	}
 	return &experiment.PostCustomOnboardOK{}
 }
