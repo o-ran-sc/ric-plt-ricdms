@@ -122,8 +122,8 @@ func (r *Restful) setupHandler() {
 
 	api.ExperimentPostCustomOnboardHandler = experiment.PostCustomOnboardHandlerFunc(func(pcop experiment.PostCustomOnboardParams) middleware.Responder {
 		ricdms.Logger.Debug("==> invoked custom onboarding")
-		defer pcop.Upfile.Close()
-		return r.rh.Onboarder.CustomOnboard(pcop.Upfile)
+		defer pcop.Helmpkg.Close()
+		return r.rh.Onboarder.CustomOnboard(pcop.Helmpkg)
 	})
 
 	api.ApplicationZipProducer = runtime.ProducerFunc(func(w io.Writer, data interface{}) error {

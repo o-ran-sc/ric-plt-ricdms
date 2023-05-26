@@ -29,17 +29,21 @@ schemes:
 paths:
   /custom-onboard:
     post:
-      summary: upload a file
+      summary: onboard helm pkg (custom onboarding)
       consumes:
         - multipart/form-data
       parameters:
         - in: formData
-          name: upfile
+          name: helmpkg
           type: file
-          description: api to upload file
+          description: This file represents the helm chart.
       responses:
         '200':
-          description: successfully uploaded
+          description: successfully onboarded helmchart
+        '500':
+          description: helmchart onboard  failed
+          schema:
+            $ref: '#/definitions/error_message'
       tags:
         - experiment
   /charts:
