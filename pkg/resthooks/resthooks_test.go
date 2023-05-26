@@ -1,22 +1,23 @@
-//==================================================================================
-//  Copyright (c) 2022 Samsung
+// ==================================================================================
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//	Copyright (c) 2022 Samsung
 //
-//       http://www.apache.org/licenses/LICENSE-2.0
+//	 Licensed under the Apache License, Version 2.0 (the "License");
+//	 you may not use this file except in compliance with the License.
+//	 You may obtain a copy of the License at
 //
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
+//	     http://www.apache.org/licenses/LICENSE-2.0
 //
-//   This source code is part of the near-RT RIC (RAN Intelligent Controller)
-//   platform project (RICP).
-//==================================================================================
+//	 Unless required by applicable law or agreed to in writing, software
+//	 distributed under the License is distributed on an "AS IS" BASIS,
+//	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//	 See the License for the specific language governing permissions and
+//	 limitations under the License.
 //
+//	 This source code is part of the near-RT RIC (RAN Intelligent Controller)
+//	 platform project (RICP).
+//
+// ==================================================================================
 package resthooks
 
 import (
@@ -39,6 +40,7 @@ import (
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/charts"
 	d "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/deploy"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/experiment"
 	h "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations/health"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/ricdms"
 	"github.com/stretchr/testify/assert"
@@ -264,5 +266,27 @@ func TestUninstallxApp(t *testing.T) {
 	response := rh.UninstallChart("test", "test", "test")
 	if _, ok := response.(*d.DeleteDeployInternalServerError); !ok {
 		assert.Fail(t, "response type did not match actual: %T", response)
+	}
+}
+
+func TestCustomOnaboardEmptyPkg(t *testing.T) {
+	svr := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ricdms.Logger.Debug("request received by mock to get chart by name and version")
+	}))
+
+	svr.Listener.Close()
+	svr.Listener, _ = net.Listen("tcp", ricdms.Config.MockServer)
+
+	svr.Start()
+	defer svr.Close()
+
+	resp := rh.Onboarder.CustomOnboard(nil)
+	ricdms.Logger.Debug("resp type:%T", resp)
+
+	switch resp.(type) {
+	case *experiment.PostCustomOnboardInternalServerError:
+		break
+	default:
+		assert.Failf(t, "case 1 response type did not match", "[actual: %T]", resp)
 	}
 }
