@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e926f71c_55f27cdf",
+        "filename": "pkg/onboard/onboarder.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2023-05-29T09:21:09Z",
+      "side": 1,
+      "message": "it is implemented in next patch :\nhttps://gerrit.o-ran-sc.org/r/c/ric-plt/ricdms/+/11229",
+      "parentUuid": "090284e3_fcc4483d",
+      "range": {
+        "startLine": 78,
+        "startChar": 32,
+        "endLine": 78,
+        "endChar": 39
+      },
+      "revId": "d25ee8c6c3027e65def77176aa08f06ba5500fe9",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5432d7a3_b0f751ac",
         "filename": "pkg/onboard/onboarder.go",
         "patchSetId": 1
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5ecaf5c_aef5dc83",
+        "filename": "pkg/onboard/onboarder.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2023-05-29T09:21:09Z",
+      "side": 1,
+      "message": "I have added the `TODO` and it is resolved after swagger fix:\nhttps://gerrit.o-ran-sc.org/r/c/ric-plt/ricdms/+/11230/1\nhttps://gerrit.o-ran-sc.org/r/c/ric-plt/ricdms/+/11231/1",
+      "parentUuid": "5432d7a3_b0f751ac",
+      "range": {
+        "startLine": 82,
+        "startChar": 9,
+        "endLine": 82,
+        "endChar": 12
+      },
+      "revId": "d25ee8c6c3027e65def77176aa08f06ba5500fe9",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2de7deb0_98d41fc1",
         "filename": "pkg/onboard/onboarder.go",
         "patchSetId": 1
@@ -60,6 +108,30 @@
       "writtenOn": "2023-05-29T08:03:00Z",
       "side": 1,
       "message": "return error code for statuscode.",
+      "range": {
+        "startLine": 89,
+        "startChar": 9,
+        "endLine": 89,
+        "endChar": 12
+      },
+      "revId": "d25ee8c6c3027e65def77176aa08f06ba5500fe9",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbb6d173_380e6cb6",
+        "filename": "pkg/onboard/onboarder.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2023-05-29T09:21:09Z",
+      "side": 1,
+      "message": "I have added the `TODO` and it is resolved after swagger fix:\nhttps://gerrit.o-ran-sc.org/r/c/ric-plt/ricdms/+/11230/1\nhttps://gerrit.o-ran-sc.org/r/c/ric-plt/ricdms/+/11231/1",
+      "parentUuid": "2de7deb0_98d41fc1",
       "range": {
         "startLine": 89,
         "startChar": 9,
