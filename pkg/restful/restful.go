@@ -30,6 +30,7 @@ import (
 	ch "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/charts"
 	dm "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/deploy"
 	ph "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/health"
+	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/models"
 	po "gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/onboard"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi"
 	"gerrit.o-ran-sc.org/r/ric-plt/ricdms/pkg/restapi/operations"
@@ -122,6 +123,12 @@ func (r *Restful) setupHandler() {
 
 	api.ExperimentPostCustomOnboardHandler = experiment.PostCustomOnboardHandlerFunc(func(pcop experiment.PostCustomOnboardParams) middleware.Responder {
 		ricdms.Logger.Debug("==> invoked custom onboarding")
+		if pcop.Helmpkg == nil {
+			errString := "formdata not provided with key helmpkg"
+			return experiment.NewPostCustomOnboardInternalServerError().WithPayload(&models.ErrorMessage{
+				ErrorMessage: &errString,
+			})
+		}
 		defer pcop.Helmpkg.Close()
 		return r.rh.Onboarder.CustomOnboard(pcop.Helmpkg)
 	})
