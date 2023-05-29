@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e088d31a_e7dc475b",
+        "filename": "pkg/restful/restful.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1001361
+      },
+      "writtenOn": "2023-05-29T07:59:14Z",
+      "side": 1,
+      "message": "can we have better name , I dont get what experiment means",
+      "range": {
+        "startLine": 123,
+        "startChar": 42,
+        "endLine": 123,
+        "endChar": 52
+      },
+      "revId": "7c9ed41ee16bdc26b24eef908b0b08d4d0ba6774",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
