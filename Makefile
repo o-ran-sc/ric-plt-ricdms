@@ -13,7 +13,7 @@
 #   limitations under the License.
 #
 
-build:
+build: generate
 	go build -o ricdms cmd/ric-dms.go
 
 generate:
