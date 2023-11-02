@@ -1,0 +1,8 @@
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Code-Review+2: subhash kumar singh <subh.singh@samsung.com>
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Submitted-by: subhash kumar singh <subh.singh@samsung.com>
+Submitted-at: Thu, 02 Nov 2023 10:51:32 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/ric-plt/ricdms/+/11997
+Project: ric-plt/ricdms
+Branch: refs/heads/master
