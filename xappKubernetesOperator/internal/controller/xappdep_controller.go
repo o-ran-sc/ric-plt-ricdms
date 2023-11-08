@@ -35,6 +35,12 @@ type XappDepReconciler struct {
 	Scheme *runtime.Scheme
 }
 
+func (r *XappDepReconciler) handle_deploy_using_generated_go_code(usage string) {
+	// return
+	if usage == "create" {
+		r.CreateAll()
+}
+
 //+kubebuilder:rbac:groups=depxapp.xapp.com,resources=xappdeps,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=depxapp.xapp.com,resources=xappdeps/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=depxapp.xapp.com,resources=xappdeps/finalizers,verbs=update
@@ -69,6 +75,9 @@ func (r *XappDepReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		// Adding a Finaliser also adds the DeletionTimestamp while deleting
 		if !controllerutil.ContainsFinalizer(instance, myFinalizerName) {
 			// Would Be Called only during CR-Creation
+			logger.Info("--- Job is in Creation state")
+			r.handle_deploy_using_generated_go_code("create")
+			logger.Info("--- Job has been Created")
 			controllerutil.AddFinalizer(instance, myFinalizerName)
 			if err := r.Update(ctx, instance); err != nil {
 				return ctrl.Result{}, err
