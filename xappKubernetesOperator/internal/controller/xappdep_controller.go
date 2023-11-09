@@ -39,6 +39,9 @@ func (r *XappDepReconciler) handle_deploy_using_generated_go_code(usage string) 
 	// return
 	if usage == "create" {
 		r.CreateAll()
+	} else {
+		r.DeleteAll()
+	}
 }
 
 //+kubebuilder:rbac:groups=depxapp.xapp.com,resources=xappdeps,verbs=get;list;watch;create;update;patch;delete
@@ -87,6 +90,9 @@ func (r *XappDepReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		// The object is being deleted
 		if controllerutil.ContainsFinalizer(instance, myFinalizerName) {
 			// remove our finalizer from the list and update it.
+			logger.Info("--- Job is in Deletion state")
+			r.handle_deploy_using_generated_go_code("delete")
+			logger.Info("--- Job has been Delete")
 			controllerutil.RemoveFinalizer(instance, myFinalizerName)
 			if err := r.Update(ctx, instance); err != nil {
 				return ctrl.Result{}, err
