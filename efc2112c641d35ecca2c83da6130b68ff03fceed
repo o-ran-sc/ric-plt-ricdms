@@ -1,0 +1,9 @@
+Verified+1: Thoralf Czichy <thoralf.czichy@nokia.com>
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Code-Review+2: Thoralf Czichy <thoralf.czichy@nokia.com>
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Submitted-by: Thoralf Czichy <thoralf.czichy@nokia.com>
+Submitted-at: Wed, 13 Dec 2023 11:03:20 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/ric-plt/ricdms/+/12259
+Project: ric-plt/ricdms
+Branch: refs/heads/master
