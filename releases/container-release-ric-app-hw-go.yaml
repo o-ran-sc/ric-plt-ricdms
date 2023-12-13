@@ -1,10 +1,10 @@
 ---
 distribution_type: container
-container_release_tag: 2.1.0
+container_release_tag: 2.1.1
 container_pull_registry: nexus3.o-ran-sc.org:10004
 container_push_registry: nexus3.o-ran-sc.org:10002
 project: ric-plt/ricdms
-ref: 32780f8ac150df85b17313d538e1e471ecf2a0dc
+ref: efc2112c641d35ecca2c83da6130b68ff03fceed
 containers:
     - name: ric-plt-ricdms
-      version: 2.1.0
+      version: 2.1.1
