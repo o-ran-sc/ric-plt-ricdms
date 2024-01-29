@@ -42,10 +42,6 @@ committers:
       email: 'subh.singh@samsung.com'
       company: 'samsung'
       id: 'subhash_singh'
-    - name: 'Abukar Mohamed'
-      email: 'abukar.mohamed@nokia.com'
-      company: 'nokia'
-      id: 'Nune'
     - name: 'Suchismita Jena'
       email: 'suchismita.jena@nokia.com'
       company: 'nokia'
@@ -54,6 +50,6 @@ tsc:
     # yamllint disable rule:line-length
     approval: 'https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=1179656'
     changes:
-        - type: ''
-          name: ''
+        - type: 'removal'
+          name: 'Abukar Mohamed'
           link: ''
